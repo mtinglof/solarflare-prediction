@@ -331,3 +331,4 @@ ASALocalRun/
 
 #jupyter notebook 
 .ipynb_checkpoints
+.ipynb
