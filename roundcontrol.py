@@ -1,6 +1,8 @@
 from mainrunner import MainRunner
 import copy
 
+# OUTDATED, DO NOT USE
+
 class RoundControl(): 
     def __init__(self): 
         #build the main runner and testing object 

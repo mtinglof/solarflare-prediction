@@ -7,6 +7,8 @@ import time
 import random
 import copy
 
+# OUTDATED, DO NOT USE
+
 class MainRunner(): 
     def __init__(self, num_of_starting_species, size_of_starting_species, training_size):
         self.size_of_starting_species = size_of_starting_species-1

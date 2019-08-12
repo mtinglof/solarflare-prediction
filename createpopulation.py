@@ -2,6 +2,8 @@ import random
 import copy 
 from creaturecreation import CreatureCreation
 
+# OUTDATED, DO NOT USE
+
 class CreatePopulation(): 
     def __init__(self): 
         self.max_number_of_genes = 5

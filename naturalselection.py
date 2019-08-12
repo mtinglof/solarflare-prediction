@@ -8,6 +8,8 @@ import torch
 import copy
 import numpy as np
 
+# OUTDATED, DO NOT USE
+
 class NaturalSelection(): 
     def __init__(self):
 

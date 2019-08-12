@@ -9,6 +9,8 @@ import copy
 import torch
 import time
 
+# OUTDATED, DO NOT USE
+
 class TestPopulation(): 
     def __init__(self, size, survival_threshold): 
         self.training_set_size = size 

@@ -1,5 +1,7 @@
 import torch
 
+# OUTDATED, DO NOT USE
+
 class CreatureCreation(): 
     def __init__(self): 
         self.creature_info = {
