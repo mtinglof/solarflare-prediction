@@ -28,7 +28,9 @@ class TestTimeCreatures:
             model.setWeights(creature.getCreature()["weights"])
             predict = model.forward(torch.tensor(creature_input, dtype=torch.float))
             np_predict = np.asarray(predict[:,0] < predict[:,1], dtype=int)
-            score = f1_score(self.training_class, np_predict)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                score = f1_score(self.training_class, np_predict)
             if score > creature.getCreature()['best_score']: 
                 creature.getCreature()['best_score'] = score
                 creature.getCreature()['best_position'] = creature.getCreature()['weights']
