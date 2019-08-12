@@ -330,5 +330,5 @@ ASALocalRun/
 .mfractor/
 
 #jupyter notebook 
-.ipynb_checkpoints
-.ipynb
+*.ipynb_checkpoints
+*.ipynb
