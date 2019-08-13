@@ -10,6 +10,7 @@ class TimeCreatureCreate:
         self.creature_info = {
             "last_score" : 0,
             "best_score" : 0,
+            "scores" : [],
             "velocity" : [0, 0], 
             "best_position" : [0, 0],
             "weights" : [0, 0]

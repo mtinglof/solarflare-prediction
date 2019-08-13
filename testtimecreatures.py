@@ -35,6 +35,7 @@ class TestTimeCreatures:
                 creature.getCreature()['best_score'] = score
                 creature.getCreature()['best_position'] = creature.getCreature()['weights']
             creature.getCreature()['last_score'] = score
+            creature.getCreature()['scores'].append(score)
 
     def getTransformedCreatureData(self): 
         full_data = self.training_set
@@ -50,9 +51,8 @@ class TestTimeCreatures:
                 test_data = full_data[name][min_row:max_row]
                 with warnings.catch_warnings():
                     warnings.simplefilter("ignore")
-                    thing_start = time.time()
                     model = tsmodel.ARIMA(test_data, (int(parameter[1]), int(parameter[4]), int(parameter[7])))
-                    aic = model.fit().aic
+                    aic = model.fit(disp=False).aic
                 none_aic_sd = (aic - self.time_mean_sd['Mean 0'][index])/self.time_mean_sd['SD 0'][index]
                 solar_aic_sd = (aic - self.time_mean_sd['Mean 1'][index])/self.time_mean_sd['SD 1'][index]
                 if(name == 'R_VALUE'): 

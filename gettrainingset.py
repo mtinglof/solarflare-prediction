@@ -13,8 +13,8 @@ import itertools
 class GetTrainingSet(): 
     def __init__(self): 
         self.path_to_data = "D:/Dev/projects/solarflare/bigdata2019-flare-prediction"
-        #self.file_name = ["fold1Training.json", "fold2Training.json", "fold3Training.json"]
-        self.file_name = ["fold3Training.json"]
+        self.file_name = ["fold1Training.json", "fold2Training.json", "fold3Training.json"]
+        #self.file_name = ["fold3Training.json"]
         self.data_size = []
         self.training_set = []
         self.set_class_labels = []
