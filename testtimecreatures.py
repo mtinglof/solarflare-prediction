@@ -1,7 +1,11 @@
 from gettrainingset import GetTrainingSet
 from neuralnetwork import Neural_Network
-import statsmodels.tsa.arima_model as tsmodel 
+#import statsmodels.tsa.arima_model as tsmodel 
 from sklearn.metrics import f1_score 
+
+import rpy2
+import rpy2.robjects as robjects
+from rpy2.robjects.packages import importr
 
 import numpy as np 
 import pandas as pd 
@@ -13,6 +17,12 @@ class TestTimeCreatures:
     def __init__(self): 
         self.time_mean_sd = pd.read_csv('time_series_mean_sd.csv')
         self.test_obj = GetTrainingSet()
+
+        base = importr('base')
+        utils = importr('utils')
+        utils.chooseCRANmirror(ind=1) 
+        utils.install_packages('forecast')
+        self.arima = robjects.r['arima']
 
     def getTestData(self, size): 
         self.training_set = self.test_obj.getTestData(size)
@@ -49,10 +59,11 @@ class TestTimeCreatures:
             for index, name in enumerate(names): 
                 parameter = self.time_mean_sd['ARIMA'][index]
                 test_data = full_data[name][min_row:max_row]
-                with warnings.catch_warnings():
-                    warnings.simplefilter("ignore")
-                    model = tsmodel.ARIMA(test_data, (int(parameter[1]), int(parameter[4]), int(parameter[7])))
-                    aic = model.fit(disp=False).aic
+                # with warnings.catch_warnings():
+                #     warnings.simplefilter("ignore")
+                    # model = tsmodel.ARIMA(test_data, (int(parameter[1]), int(parameter[4]), int(parameter[7])))
+                    # aic = model.fit(disp=False).aic
+                aic = self.arima(robjects.FloatVector(test_data), robjects.IntVector([int(parameter[1]), int(parameter[4]), int(parameter[7])]))[5][0] 
                 none_aic_sd = (aic - self.time_mean_sd['Mean 0'][index])/self.time_mean_sd['SD 0'][index]
                 solar_aic_sd = (aic - self.time_mean_sd['Mean 1'][index])/self.time_mean_sd['SD 1'][index]
                 if(name == 'R_VALUE'): 
