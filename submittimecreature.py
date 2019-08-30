@@ -5,6 +5,10 @@ import statsmodels.tsa.arima_model as tsmodel
 import pandas as pd
 import numpy as np
 
+import rpy2
+import rpy2.robjects as robjects
+from rpy2.robjects.packages import importr
+
 import warnings
 import os
 import re
@@ -28,8 +32,10 @@ class SubmitCreature():
             data = data.loc[last_n_indices]
             test_frames_to_be_added.append(data)
         self.test_set = pd.concat(test_frames_to_be_added)
+        print("done")
 
     def getData(self): 
+        print("reading submission data")
         with open(self.fname, 'r') as infile: 
             for line in infile:  
                 data = self.getDataAtIndex(line)
@@ -75,10 +81,11 @@ class SubmitCreature():
             for index, name in enumerate(names): 
                 parameter = self.time_mean_sd['ARIMA'][index]
                 test_data = full_data[name][min_row:max_row]
-                with warnings.catch_warnings():
-                    warnings.simplefilter("ignore")
-                    model = tsmodel.ARIMA(test_data, (int(parameter[1]), int(parameter[4]), int(parameter[7])))
-                    aic = model.fit(disp=False).aic
+                # with warnings.catch_warnings():
+                #     warnings.simplefilter("ignore")
+                #     model = tsmodel.ARIMA(test_data, (int(parameter[1]), int(parameter[4]), int(parameter[7])))
+                #     aic = model.fit(disp=False).aic
+                aic = self.arima(robjects.FloatVector(test_data), robjects.IntVector([int(parameter[1]), int(parameter[4]), int(parameter[7])]))[5][0] 
                 none_aic_sd = (aic - self.time_mean_sd['Mean 0'][index])/self.time_mean_sd['SD 0'][index]
                 solar_aic_sd = (aic - self.time_mean_sd['Mean 1'][index])/self.time_mean_sd['SD 1'][index]
                 if(name == 'R_VALUE'): 

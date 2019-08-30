@@ -25,15 +25,22 @@ class TestTimeCreatures:
         self.arima = robjects.r['arima']
 
     def getTestData(self, size): 
+        #print("getting training set...")
         self.training_set = self.test_obj.getTestData(size)
+        #print("done")
         #self.training_set = self.training_set.drop(["XR_MAX", "MEANPOT"], axis = 1) 
 
     def getClassTestData(self):
         self.training_class = self.test_obj.getClassTestData()
 
     def testCreatures(self, creature_collection): 
+        #print("fitting...")
         creature_input = self.getTransformedCreatureData()
+        #print("done")
+        #print("testing...")
+        #whole_time = 0 
         for creature in creature_collection: 
+            #start = time.time()
             model = Neural_Network(creature.input_length, creature.hidden_length)
             model.setWeights(creature.getCreature()["weights"])
             predict = model.forward(torch.tensor(creature_input, dtype=torch.float))
@@ -46,6 +53,9 @@ class TestTimeCreatures:
                 creature.getCreature()['best_position'] = creature.getCreature()['weights']
             creature.getCreature()['last_score'] = score
             creature.getCreature()['scores'].append(score)
+            #whole_time += time.time() - start
+        #print(whole_time)
+        #print("done")
 
     def getTransformedCreatureData(self): 
         full_data = self.training_set
@@ -54,6 +64,7 @@ class TestTimeCreatures:
         obs = len(full_data)/60
         min_row = 0 
         max_row = 60
+        #whole_time = 0 
         for x in range(0, int(obs)): 
             aic_row = []
             for index, name in enumerate(names): 
@@ -63,7 +74,9 @@ class TestTimeCreatures:
                 #     warnings.simplefilter("ignore")
                     # model = tsmodel.ARIMA(test_data, (int(parameter[1]), int(parameter[4]), int(parameter[7])))
                     # aic = model.fit(disp=False).aic
+                #start = time.time()
                 aic = self.arima(robjects.FloatVector(test_data), robjects.IntVector([int(parameter[1]), int(parameter[4]), int(parameter[7])]))[5][0] 
+                #whole_time += time.time() - start
                 none_aic_sd = (aic - self.time_mean_sd['Mean 0'][index])/self.time_mean_sd['SD 0'][index]
                 solar_aic_sd = (aic - self.time_mean_sd['Mean 1'][index])/self.time_mean_sd['SD 1'][index]
                 if(name == 'R_VALUE'): 
@@ -78,4 +91,5 @@ class TestTimeCreatures:
             aic_hold.append(aic_row)
             min_row = min_row + 60
             max_row = max_row + 60
+        #print(whole_time)
         return(np.array(aic_hold))

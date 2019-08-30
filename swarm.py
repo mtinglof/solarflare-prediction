@@ -16,7 +16,8 @@ class Swarm():
         sorted_collection = sorted(self.creature_collection, key = lambda timecreaturecreate: timecreaturecreate.getCreature()["last_score"], reverse=True)
         self.best_position = sorted_collection[0].getCreature()['weights']
         self.high = round(sorted_collection[0].getCreature()['last_score'], 4) * 100
-        print("high: {}".format(self.high))
+        #print("high: {}".format(self.high))
+        print(self.high)
 
     def updateVelocity(self): 
         for creature in self.creature_collection: 

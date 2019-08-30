@@ -14,6 +14,7 @@ class GetTrainingSet():
     def __init__(self): 
         self.path_to_data = "D:/Dev/projects/solarflare/bigdata2019-flare-prediction"
         self.file_name = ["fold1Training.json", "fold2Training.json", "fold3Training.json"]
+        #self.file_name = ["fold1Training.json", "fold3Training.json"]
         #self.file_name = ["fold3Training.json"]
         self.data_size = []
         self.training_set = []
@@ -23,6 +24,7 @@ class GetTrainingSet():
 
     def getDataSize(self): 
         for data_file in self.file_name: 
+            print(data_file)
             fname = os.path.join(self.path_to_data, data_file)
             with open(fname, 'r') as infile: 
                 for index, line in enumerate(infile):  
@@ -30,6 +32,7 @@ class GetTrainingSet():
                     data, class_label = self.getDataAtIndex(line)
                     data_dict = {"data" : data, "class_label" : class_label}
                     self.full_data_set.append(data_dict)
+            print("done")
 
     def getTestData(self, size): 
         test_data_index = random.sample(self.data_size, size)
